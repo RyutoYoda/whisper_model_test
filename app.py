@@ -40,26 +40,25 @@ if audio_file is not None:
         )
 
 if st.button("テキストを要約する"):
-    text_to_summarize = transcript if 'transcript' in locals() else prompt
+    # 音声文字起こしの結果とサイドバーでの指示を組み合わせる
+    combined_prompt = f"{prompt}\n\n{text_to_summarize}" if 'transcript' in locals() else prompt
 
     messages = [
         {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": text_to_summarize}
+        {"role": "user", "content": combined_prompt}
     ]
 
     with st.spinner("テキスト要約を実行中です..."):
-        response = client.chat.completions.create(
+        summary_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages
         )
 
-        # 応答オブジェクトから要約テキストを抽出
-        if response.choices and len(response.choices) > 0:
-            # choicesリストの最初の要素からmessagesを取得
-            choice_messages = response.choices[0].get("messages")
-            if choice_messages and len(choice_messages) > 0:
-                # messagesリストの最後の要素（アシスタントの返答）からcontentを取得
-                summary = choice_messages[-1].get("content", "要約を取得できませんでした。")
+        # 応答から要約テキストを取得する修正された方法
+        if hasattr(summary_response, 'choices') and summary_response.choices:
+            last_choice = summary_response.choices[0]
+            if hasattr(last_choice, 'messages') and last_choice.messages:
+                summary = last_choice.messages[-1]['content']
             else:
                 summary = "要約を取得できませんでした。"
         else:
@@ -73,3 +72,4 @@ if st.button("テキストを要約する"):
             f'<a href="data:file/txt;base64,{summary_encoded}" download="summary.txt">要約結果をダウンロード</a>',
             unsafe_allow_html=True,
         )
+
