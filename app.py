@@ -49,7 +49,7 @@ if st.button("テキストを要約する"):
         summary_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "あなたは文章を適切に１度でまとめるAIです"},
                 {"role": "user", "content": prompt_text}
             ]
         )
