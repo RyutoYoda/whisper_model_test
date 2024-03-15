@@ -40,11 +40,8 @@ if audio_file is not None:
         )
 
 if st.button("テキストを要約する"):
-    # 音声文字起こしの結果が存在するかチェック
-    if 'transcript' in locals():
-        combined_prompt = f"{prompt}\n\n{transcript}" 
-    else:
-        combined_prompt = prompt
+    # 音声文字起こしの結果とサイドバーでの指示を組み合わせる
+    combined_prompt = f"{prompt}\n\n{transcript}" if 'transcript' in locals() else prompt
 
     messages = [
         {"role": "system", "content": "You are a helpful assistant."},
@@ -52,16 +49,16 @@ if st.button("テキストを要約する"):
     ]
 
     with st.spinner("テキスト要約を実行中です..."):
-        summary_response = client.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages
         )
 
-        if hasattr(summary_response, 'choices') and summary_response.choices:
-            last_choice = summary_response.choices[0]
-            summary = last_choice.messages[-1]['content'] if last_choice.messages else "要約を取得できませんでした。"
-        else:
-            summary = "要約を取得できませんでした。"
+        # 応答から要約テキストを取得する方法を改善
+        try:
+            summary = response.choices[0].message['content'] if response.choices else "要約を取得できませんでした。"
+        except AttributeError:
+            summary = "要約テキストの取得中にエラーが発生しました。"
 
         st.success("テキスト要約が完了しました！")
         st.text_area("要約結果", summary, height=150)
