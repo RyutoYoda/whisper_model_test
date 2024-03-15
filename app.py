@@ -39,32 +39,31 @@ if audio_file is not None:
             unsafe_allow_html=True,
         )
 
-# テキストを要約するボタン
 if st.button("テキストを要約する"):
-    if 'transcript' in locals():
-        # 音声文字起こしがある場合、そのテキストを使用
-        text_to_summarize = transcript
-    else:
-        # 音声文字起こしがない場合、ユーザーが入力したプロンプトを使用
-        text_to_summarize = prompt
+  if 'transcript' in locals():
+    # 音声文字起こしがある場合、そのテキストを使用
+    text_to_summarize = transcript
+  else:
+    # 音声文字起こしがない場合、ユーザーが入力したプロンプトを使用
+    text_to_summarize = prompt
 
-    with st.spinner("テキスト要約を実行中です..."):
-        # プロンプトとともにテキスト要約を実行
-        summary_response = client.Completion.create(
-            model="gpt-3.5-turbo",
-            prompt=f"{prompt}\n\n{text_to_summarize}",
-            max_tokens=150,
-            temperature=0.7
-        )
-        summary = summary_response.choices[0].text.strip()
-        st.success("テキスト要約が完了しました！")
-        st.text_area("要約結果", summary, height=150)
+  with st.spinner("テキスト要約を実行中です..."):
+    # プロンプトとともにテキスト要約を実行
+    summary_response = client.Completion.create(
+      model="gpt-3.5-turbo",
+      prompt=f"{prompt}\n\n{text_to_summarize}",
+      max_tokens=150,
+      temperature=0.7
+    )
+    summary = summary_response.choices[0].text.strip()
+    st.success("テキスト要約が完了しました！")
+    st.text_area("要約結果", summary, height=150)
 
-        # 要約をバイトに変換し、それをbase64でエンコードする
-        summary_encoded = base64.b64encode(summary.encode()).decode()
+    # 要約をバイトに変換し、それをbase64でエンコードする
+    summary_encoded = base64.b64encode(summary.encode()).decode()
 
-        # ダウンロードリンクを作成する
-        st.markdown(
-            f'<a href="data:file/txt;base64,{summary_encoded}" download="summary.txt">要約結果をダウンロード</a>',
-            unsafe_allow_html=True,
-        )
+    # ダウンロードリンクを作成する
+    st.markdown(
+      f'<a href="data:file/txt;base64,{summary_encoded}" download="summary.txt">要約結果をダウンロード</a>',
+      unsafe_allow_html=True,
+    )
