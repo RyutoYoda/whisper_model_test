@@ -11,7 +11,7 @@ st.title("VoiceCat🐈")
 
 # サイドバーでAPIキーを設定
 api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
-client = OpenAI(api_key=api_key)
+client = openAI(api_key=api_key)
 
 # サイドバーにプロンプト入力フィールドを追加
 prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
