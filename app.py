@@ -15,7 +15,7 @@ api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
 client = OpenAI(api_key=api_key)
 
 # サイドバーにプロンプト入力フィールドを追加
-prompt_text = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
+prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
 audio_file = st.file_uploader(
     "音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"]
 )
@@ -25,10 +25,9 @@ if audio_file is not None:
 
     if st.button("音声文字起こしを実行する"):
         with st.spinner("音声文字起こしを実行中です..."):
-            transcript_response = client.audio.transcriptions.create(
+            transcript = client.audio.transcriptions.create(
                 model="whisper-1", file=audio_file, response_format="text"
             )
-            transcript = transcript_response['text']
         st.success("音声文字起こしが完了しました！")
         st.write(transcript)
 
@@ -41,33 +40,38 @@ if audio_file is not None:
         )
 
 if st.button("テキストを要約する"):
-  if 'transcript' in locals():
-    combined_text = prompt_text + " " + transcript  # プロンプトと文字起こしテキストを組み合わせる
-  else:
-    combined_text = prompt_text
+    # 文字起こししたテキストまたはサイドバーからのプロンプトを要約するテキストとして使用
+    text_to_summarize = transcript if 'transcript' in locals() else prompt
 
-  messages = [
-    {"role": "system", "content": "You are a helpful assistant who summarizes texts."},
-    {"role": "user", "content": combined_text}
-  ]
+    # システムプロンプトに要約タスクを追加し、ユーザーテキストを追加
+    system_prompt = "You are a helpful assistant who summarizes texts."
+    user_message = {"role": "user", "content": text_to_summarize}
+    
+    messages = [
+        {"role": "system", "content": system_prompt},
+        user_message
+    ]
 
-  with st.spinner("テキスト要約を実行中です..."):
-    summary_response = client.chat.completions.create(
-      model="gpt-3.5-turbo",
-      messages=messages
-    )
-    # 最後のメッセージ（要約）を取得
-    summary = "要約を取得できませんでした。"  # 初期値
-    if summary_response.get('choices') and len(summary_response['choices']) > 0:
-        last_choice = summary_response['choices'][0]
-        if last_choice.get('messages') and len(last_choice['messages']) > 0:
-            summary = last_choice['messages'][-1]['content']
+    with st.spinner("テキスト要約を実行中です..."):
+        summary_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=messages
+        )
+        # 最後のメッセージ（要約）を取得
+        if summary_response['choices'] and len(summary_response['choices']) > 0:
+            last_choice = summary_response['choices'][0]
+            if last_choice['messages'] and len(last_choice['messages']) > 0:
+                summary = last_choice['messages'][-1]['content']
+            else:
+                summary = "要約を取得できませんでした。"
+        else:
+            summary = "要約を取得できませんでした。"
 
-    st.success("テキスト要約が完了しました！")
-    st.text_area("要約結果", summary, height=150)
+        st.success("テキスト要約が完了しました！")
+        st.text_area("要約結果", summary, height=150)
 
-    summary_encoded = base64.b64encode(summary.encode()).decode()
-    st.markdown(
-      f'<a href="data:file/txt;base64,{summary_encoded}" download="summary.txt">要約結果をダウンロード</a>',
-      unsafe_allow_html=True,
-    )
+        summary_encoded = base64.b64encode(summary.encode()).decode()
+        st.markdown(
+            f'<a href="data:file/txt;base64,{summary_encoded}" download="summary.txt">要約結果をダウンロード</a>',
+            unsafe_allow_html=True,
+        )
