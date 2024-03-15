@@ -42,25 +42,24 @@ if audio_file is not None:
 if st.button("テキストを要約する"):
     text_to_summarize = transcript if 'transcript' in locals() else prompt
 
-    system_prompt = "You are a helpful assistant who summarizes texts."
-    user_message = {"role": "user", "content": text_to_summarize}
-    
     messages = [
-        {"role": "system", "content": system_prompt},
-        user_message
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": text_to_summarize}
     ]
 
     with st.spinner("テキスト要約を実行中です..."):
-        summary_response = client.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages
         )
 
-        # 応答から要約テキストを取得する修正された方法
-        if hasattr(summary_response, 'choices') and summary_response.choices:
-            last_choice = summary_response.choices[0]
-            if hasattr(last_choice, 'messages') and last_choice.messages:
-                summary = last_choice.messages[-1]['content']
+        # 応答オブジェクトから要約テキストを抽出
+        if response.choices and len(response.choices) > 0:
+            # choicesリストの最初の要素からmessagesを取得
+            choice_messages = response.choices[0].get("messages")
+            if choice_messages and len(choice_messages) > 0:
+                # messagesリストの最後の要素（アシスタントの返答）からcontentを取得
+                summary = choice_messages[-1].get("content", "要約を取得できませんでした。")
             else:
                 summary = "要約を取得できませんでした。"
         else:
