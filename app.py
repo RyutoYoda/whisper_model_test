@@ -44,8 +44,6 @@ if st.button("テキストを要約する"):
     prompt_text = sidebar_prompt
     if 'transcript' in locals():
         prompt_text += f"\n\n{transcript}" 
-
-    with st.spinner("テキスト要約を実行中です..."):
         summary_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -55,7 +53,7 @@ if st.button("テキストを要約する"):
         )
 
         # 応答オブジェクトをそのまま表示
-        st.text_area("要約結果", str(summary_response), height=150)
+        st.text_area("要約結果", str(summary_response))
 
         # 応答をバイトに変換し、それをbase64でエンコードする
         response_encoded = base64.b64encode(str(summary_response).encode()).decode()
