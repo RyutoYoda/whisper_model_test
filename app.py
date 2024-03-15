@@ -40,8 +40,11 @@ if audio_file is not None:
         )
 
 if st.button("テキストを要約する"):
-    # 音声文字起こしの結果とサイドバーでの指示を組み合わせる
-    combined_prompt = f"{prompt}\n\n{transcript}" 
+    # 音声文字起こしの結果が存在するかチェック
+    if 'transcript' in locals():
+        combined_prompt = f"{prompt}\n\n{transcript}" 
+    else:
+        combined_prompt = prompt
 
     messages = [
         {"role": "system", "content": "You are a helpful assistant."},
@@ -54,13 +57,9 @@ if st.button("テキストを要約する"):
             messages=messages
         )
 
-        # 応答から要約テキストを取得する修正された方法
         if hasattr(summary_response, 'choices') and summary_response.choices:
             last_choice = summary_response.choices[0]
-            if hasattr(last_choice, 'messages') and last_choice.messages:
-                summary = last_choice.messages[-1]['content']
-            else:
-                summary = "要約を取得できませんでした。"
+            summary = last_choice.messages[-1]['content'] if last_choice.messages else "要約を取得できませんでした。"
         else:
             summary = "要約を取得できませんでした。"
 
