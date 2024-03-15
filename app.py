@@ -2,7 +2,7 @@ import base64
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from openai
+import openai
 from io import BytesIO
 
 # 環境変数を読み込む
