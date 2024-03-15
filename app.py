@@ -42,33 +42,35 @@ if audio_file is not None:
 if st.button("テキストを要約する"):
     text_to_summarize = transcript if 'transcript' in locals() else prompt
 
+    system_prompt = "You are a helpful assistant who summarizes texts."
+    user_message = {"role": "user", "content": text_to_summarize}
+    
     messages = [
-        {"role": "system", "content": "You are a helpful assistant who summarizes texts."},
-        {"role": "user", "content": text_to_summarize}
+        {"role": "system", "content": system_prompt},
+        user_message
     ]
 
-    try:
-        with st.spinner("テキスト要約を実行中です..."):
-            summary_response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=messages
-            )
-            # レスポンス構造をチェック
-            if summary_response.get('choices') and len(summary_response['choices']) > 0:
-                last_choice = summary_response['choices'][0]
-                if last_choice.get('messages') and len(last_choice['messages']) > 0:
-                    summary = last_choice['messages'][-1]['content']
-                else:
-                    summary = "要約を取得できませんでした。"
+    with st.spinner("テキスト要約を実行中です..."):
+        summary_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=messages
+        )
+
+        # 応答から要約テキストを取得する修正された方法
+        if hasattr(summary_response, 'choices') and summary_response.choices:
+            last_choice = summary_response.choices[0]
+            if hasattr(last_choice, 'messages') and last_choice.messages:
+                summary = last_choice.messages[-1]['content']
             else:
                 summary = "要約を取得できませんでした。"
-            st.success("テキスト要約が完了しました！")
-            st.text_area("要約結果", summary, height=150)
-    except Exception as e:
-        st.error(f"エラーが発生しました: {e}")
+        else:
+            summary = "要約を取得できませんでした。"
 
-    summary_encoded = base64.b64encode(summary.encode()).decode()
-    st.markdown(
-        f'<a href="data:file/txt;base64,{summary_encoded}" download="summary.txt">要約結果をダウンロード</a>',
-        unsafe_allow_html=True,
-    )
+        st.success("テキスト要約が完了しました！")
+        st.text_area("要約結果", summary, height=150)
+
+        summary_encoded = base64.b64encode(summary.encode()).decode()
+        st.markdown(
+            f'<a href="data:file/txt;base64,{summary_encoded}" download="summary.txt">要約結果をダウンロード</a>',
+            unsafe_allow_html=True,
+        )
