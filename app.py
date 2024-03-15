@@ -2,7 +2,7 @@ import base64
 import os
 import streamlit as st
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI
 from io import BytesIO
 
 # 環境変数を読み込む
@@ -12,7 +12,7 @@ st.title("VoiceCat🐈")
 
 # サイドバーでAPIキーを設定
 api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
-openai.api_key = api_key
+client = OpenAI(api_key=api_key)
 
 # サイドバーにプロンプト入力フィールドを追加
 prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
@@ -30,13 +30,17 @@ if audio_file is not None:
             audio_bytes = BytesIO(audio_file.read())
             
             # 音声文字起こしを実行
-            transcription = openai.audio.transcriptions.create("whisper-1", audio_bytes)
+            transcription = client.audio.transcriptions.create(
+                model="whisper-1",
+                file=audio_bytes,
+                response_format="text"
+            )
 
             st.success("音声文字起こしが完了しました！")
-            st.text_area("文字起こし結果", transcription["text"], height=150)
+            st.text_area("文字起こし結果", transcription.text, height=150)
 
             # 文字起こしをバイトに変換し、それをbase64でエンコードする
-            transcript_encoded = base64.b64encode(transcription["text"].encode()).decode()
+            transcript_encoded = base64.b64encode(transcription.text.encode()).decode()
 
             # ダウンロードリンクを作成する
             st.markdown(
@@ -51,8 +55,8 @@ if audio_file is not None:
                 # プロンプトとともにテキスト要約を実行
                 summary_response = openai.Completion.create(
                     model="text-davinci-003",
-                    prompt=f"{prompt}\n\n{transcription['text']}",
-                    max_tokens=150, 
+                    prompt=f"{prompt}\n\n{transcription.text}",
+                    max_tokens=150,
                     temperature=0.7
                 )
                 summary = summary_response.choices[0].text.strip()
