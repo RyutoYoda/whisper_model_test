@@ -12,7 +12,7 @@ load_dotenv()
 api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
 client = OpenAI(api_key=api_key)
 
-st.title("音声文字起こしとテキスト要約アプリ")
+st.title("VoiceCat🐈")
 
 # サイドバーにプロンプト入力フィールドを追加
 prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
