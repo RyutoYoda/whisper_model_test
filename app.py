@@ -41,14 +41,14 @@ if audio_file is not None:
 
 if st.button("テキストを要約する"):
     if 'transcript' in locals():
-        prompt_text = f"{prompt}\n\n{transcript}" 
+        prompt = f"{sidebar_prompt}\n\n{transcript}" 
 
     with st.spinner("テキスト要約を実行中です..."):
         summary_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt_text}
+                {"role": "user", "content": prompt}
             ]
         )
 
