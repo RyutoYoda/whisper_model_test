@@ -18,6 +18,7 @@ openai.api_key = api_key
 
 # サイドバーにプロンプト入力フィールドを追加
 prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
+
 # 音声ファイルをアップロードしてください
 audio_file = st.file_uploader("音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"])
 
@@ -31,8 +32,7 @@ if audio_file is not None:
             audio_bytes = BytesIO(audio_file.read())
             
             # 音声文字起こしを実行
-            transcript_response = openai.Audio.transcribe("whisper-1", audio_bytes)
-            transcript = transcript_response["text"]
+            transcript = openai.Transcript.create("whisper-1", audio_bytes)["text"]
 
             st.success("音声文字起こしが完了しました！")
             st.text_area("文字起こし結果", transcript, height=150)
