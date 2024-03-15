@@ -41,7 +41,7 @@ if audio_file is not None:
 
 if st.button("テキストを要約する"):
     # 音声文字起こしの結果とサイドバーでの指示を組み合わせる
-    combined_prompt = f"{prompt}\n\n{text_to_summarize}" if 'transcript' in locals() else prompt
+    combined_prompt = f"{prompt}\n\n{transcript}" 
 
     messages = [
         {"role": "system", "content": "You are a helpful assistant."},
