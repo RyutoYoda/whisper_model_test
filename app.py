@@ -40,34 +40,29 @@ if audio_file is not None:
         )
 
 if st.button("テキストを要約する"):
-    combined_prompt = sidebar_prompt
     if 'transcript' in locals():
-        combined_prompt += f"\n\n{transcript}"
+        prompt_text = f"{prompt}\n\n{transcript}" 
+    else:
+        prompt_text = prompt
 
     with st.spinner("テキスト要約を実行中です..."):
         summary_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": combined_prompt}
+                {"role": "user", "content": prompt_text}
             ]
         )
 
-        # 応答から要約テキストを取得
-        if hasattr(summary_response, 'choices') and summary_response.choices:
-            last_choice = summary_response.choices[0]
-            if hasattr(last_choice, 'messages') and last_choice.messages:
-                summary = last_choice.messages[-1]['content']
-            else:
-                summary = "要約を取得できませんでした。"
-        else:
-            summary = "要約を取得できませんでした。"
+        # 応答オブジェクトをそのまま表示
+        st.text_area("要約結果", str(summary_response), height=150)
 
-        st.success("テキスト要約が完了しました！")
-        st.text_area("要約結果", summary, height=150)
+        # 応答をバイトに変換し、それをbase64でエンコードする
+        response_encoded = base64.b64encode(str(summary_response).encode()).decode()
 
-        summary_encoded = base64.b64encode(summary.encode()).decode()
+        # ダウンロードリンクを作成する
         st.markdown(
-            f'<a href="data:file/txt;base64,{summary_encoded}" download="summary.txt">要約結果をダウンロード</a>',
+            f'<a href="data:file/txt;base64,{response_encoded}" download="summary_response.txt">要約結果をダウンロード</a>',
             unsafe_allow_html=True,
         )
+
