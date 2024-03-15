@@ -16,7 +16,6 @@ client = OpenAI(api_key=api_key)
 
 # サイドバーにプロンプト入力フィールドを追加
 prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
-
 audio_file = st.file_uploader(
     "音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"]
 )
@@ -39,8 +38,6 @@ if audio_file is not None:
             f'<a href="data:file/txt;base64,{transcript_encoded}" download="transcript.txt">Download Result</a>',
             unsafe_allow_html=True,
         )
-
-
     # テキストを要約するボタン
     if st.button("テキストを要約する"):
         if 'transcript' in locals():
