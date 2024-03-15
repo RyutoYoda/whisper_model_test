@@ -51,7 +51,7 @@ if st.button("テキストを要約する"):
     with st.spinner("テキスト要約を実行中です..."):
         # プロンプトとともにテキスト要約を実行
         summary_response = client.Completion.create(
-            model="text-davinci-003",
+            model="gpt-3.5-turbo",
             prompt=f"{prompt}\n\n{text_to_summarize}",
             max_tokens=150,
             temperature=0.7
