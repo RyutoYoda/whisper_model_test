@@ -15,7 +15,7 @@ api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
 client = OpenAI(api_key=api_key)
 
 # サイドバーにプロンプト入力フィールドを追加
-prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
+sidebar_prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
 audio_file = st.file_uploader(
     "音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"]
 )
@@ -40,25 +40,28 @@ if audio_file is not None:
         )
 
 if st.button("テキストを要約する"):
-    # 音声文字起こしの結果とサイドバーでの指示を組み合わせる
-    combined_prompt = f"{prompt}\n\n{transcript}" if 'transcript' in locals() else prompt
-
-    messages = [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": combined_prompt}
-    ]
+    combined_prompt = sidebar_prompt
+    if 'transcript' in locals():
+        combined_prompt += f"\n\n{transcript}"
 
     with st.spinner("テキスト要約を実行中です..."):
-        response = client.chat.completions.create(
+        summary_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=messages
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": combined_prompt}
+            ]
         )
 
-        # 応答から要約テキストを取得する方法を改善
-        try:
-            summary = response.choices[0].message['content'] if response.choices else "要約を取得できませんでした。"
-        except AttributeError:
-            summary = "要約テキストの取得中にエラーが発生しました。"
+        # 応答から要約テキストを取得
+        if hasattr(summary_response, 'choices') and summary_response.choices:
+            last_choice = summary_response.choices[0]
+            if hasattr(last_choice, 'messages') and last_choice.messages:
+                summary = last_choice.messages[-1]['content']
+            else:
+                summary = "要約を取得できませんでした。"
+        else:
+            summary = "要約を取得できませんでした。"
 
         st.success("テキスト要約が完了しました！")
         st.text_area("要約結果", summary, height=150)
@@ -68,4 +71,3 @@ if st.button("テキストを要約する"):
             f'<a href="data:file/txt;base64,{summary_encoded}" download="summary.txt">要約結果をダウンロード</a>',
             unsafe_allow_html=True,
         )
-
