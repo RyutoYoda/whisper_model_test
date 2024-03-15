@@ -1,9 +1,8 @@
 import base64
 import os
-
-import streamlit as st
+from openai import OpenAI
 from dotenv import load_dotenv
-import openai
+import streamlit as st
 
 # 環境変数を読み込む
 load_dotenv()
@@ -12,7 +11,7 @@ st.title("VoiceCat🐈")
 
 # サイドバーでAPIキーを設定
 api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
-openai.api_key = api_key
+client = OpenAI(api_key=api_key)
 
 # サイドバーにプロンプト入力フィールドを追加
 prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
@@ -27,8 +26,9 @@ if audio_file is not None:
     # 音声を文字起こしするボタン
     if st.button("音声を文字起こしする"):
         with st.spinner("音声文字起こしを実行中です..."):
+            # 音声ファイルをバイナリモードで開く処理を削除し、直接file_uploaderからのファイルを渡す
             # 音声文字起こしを実行
-            transcript_response = openai.Audio.transcriptions.create(
+            transcript_response = client.audio.transcriptions.create(
                 model="whisper-1", file=audio_file, response_format="text"
             )
             transcript = transcript_response['data'][0]['text']
@@ -41,11 +41,11 @@ if audio_file is not None:
             unsafe_allow_html=True,
         )
 
-    # テキストを要約するボタン（文字起こし結果が存在する場合のみ表示）
+    # 以下の要約処理は変更なし
     if transcript and st.button("テキストを要約する"):
         with st.spinner("テキスト要約を実行中です..."):
             # プロンプトとともにテキスト要約を実行
-            summary_response = openai.Completion.create(
+            summary_response = client.completions.create(
                 model="text-davinci-003",  # または 'gpt-3.5-turbo' など、使用したいモデルに応じて変更
                 prompt=f"{prompt}\n\n{transcript}",
                 max_tokens=150,  # 要約の最大トークン数
@@ -62,3 +62,4 @@ if audio_file is not None:
         )
 else:
     st.info('音声ファイルをアップロードしてください。')
+
