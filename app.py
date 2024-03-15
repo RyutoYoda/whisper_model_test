@@ -4,6 +4,8 @@ import streamlit as st
 from dotenv import load_dotenv
 import openai
 from tempfile import NamedTemporaryFile
+import io
+from io import BytesIO
 
 # 環境変数を読み込む
 load_dotenv()
@@ -16,6 +18,7 @@ openai.api_key = api_key
 
 # サイドバーにプロンプト入力フィールドを追加
 prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
+# 音声ファイルをアップロードしてください
 audio_file = st.file_uploader("音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"])
 
 if audio_file is not None:
@@ -24,10 +27,11 @@ if audio_file is not None:
     # 音声を文字起こしするボタン
     if st.button("音声を文字起こしする"):
         with st.spinner("音声文字起こしを実行中です..."):
-            # 音声ファイルを開く
-            with audio_file.open() as f:
-                # 音声文字起こしを実行
-                transcript_response = openai.Audio.transcribe("whisper-1", f)
+            # BytesIOオブジェクトを作成
+            audio_bytes = BytesIO(audio_file.read())
+            
+            # 音声文字起こしを実行
+            transcript_response = openai.Audio.transcribe("whisper-1", audio_bytes)
             transcript = transcript_response["text"]
 
             st.success("音声文字起こしが完了しました！")
@@ -41,7 +45,6 @@ if audio_file is not None:
                 f'<a href="data:file/txt;base64,{transcript_encoded}" download="transcript.txt">文字起こし結果をダウンロード</a>',
                 unsafe_allow_html=True,
             )
-
         # テキストを要約するボタン
         if st.button("テキストを要約する"):
             if 'transcript' in locals():
