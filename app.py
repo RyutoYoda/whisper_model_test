@@ -17,45 +17,38 @@ client = OpenAI(api_key=api_key)
 # サイドバーにプロンプト入力フィールドを追加
 prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
 
-# 音声ファイルをアップロードしてください
-audio_file = st.file_uploader("音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"])
+audio_file = st.file_uploader(
+    "音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"]
+)
 
 if audio_file is not None:
     st.audio(audio_file, format="audio/wav")
 
-    # 音声を文字起こしするボタン
-    if st.button("音声を文字起こしする"):
+    if st.button("音声文字起こしを実行する"):
         with st.spinner("音声文字起こしを実行中です..."):
-            # BytesIOオブジェクトを作成
-            audio_bytes = BytesIO(audio_file.read())
-            
-            # 音声文字起こしを実行
-            transcription = client.audio.transcriptions.create(
-                model="whisper-1",
-                file=audio_bytes,
-                response_format="text"
+            transcript = client.audio.transcriptions.create(
+                model="whisper-1", file=audio_file, response_format="text"
             )
+        st.success("音声文字起こしが完了しました！")
+        st.write(transcript)
 
-            st.success("音声文字起こしが完了しました！")
-            st.text_area("文字起こし結果", transcription.text, height=150)
+        # 文字起こしをバイトに変換し、それをbase64でエンコードする
+        transcript_encoded = base64.b64encode(transcript.encode()).decode()
+        # ダウンロードリンクを作成する
+        st.markdown(
+            f'<a href="data:file/txt;base64,{transcript_encoded}" download="transcript.txt">Download Result</a>',
+            unsafe_allow_html=True,
+        )
 
-            # 文字起こしをバイトに変換し、それをbase64でエンコードする
-            transcript_encoded = base64.b64encode(transcription.text.encode()).decode()
-
-            # ダウンロードリンクを作成する
-            st.markdown(
-                f'<a href="data:file/txt;base64,{transcript_encoded}" download="transcript.txt">文字起こし結果をダウンロード</a>',
-                unsafe_allow_html=True,
-            )
 
     # テキストを要約するボタン
     if st.button("テキストを要約する"):
-        if 'transcription' in locals():
+        if 'transcript' in locals():
             with st.spinner("テキスト要約を実行中です..."):
                 # プロンプトとともにテキスト要約を実行
                 summary_response = openai.Completion.create(
                     model="text-davinci-003",
-                    prompt=f"{prompt}\n\n{transcription.text}",
+                    prompt=f"{prompt}\n\n{transcript.text}",
                     max_tokens=150,
                     temperature=0.7
                 )
