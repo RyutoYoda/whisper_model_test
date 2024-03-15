@@ -30,7 +30,7 @@ if audio_file is not None:
             audio_bytes = BytesIO(audio_file.read())
             
             # 音声文字起こしを実行
-            transcription = openai.Audio.transcribe("whisper-1", audio_bytes)
+            transcription = openai.audio.transcriptions.create("whisper-1", audio_bytes)
 
             st.success("音声文字起こしが完了しました！")
             st.text_area("文字起こし結果", transcription["text"], height=150)
