@@ -2,7 +2,7 @@ import base64
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai
 from io import BytesIO
 
 # 環境変数を読み込む
@@ -12,7 +12,7 @@ st.title("VoiceCat🐈")
 
 # サイドバーでAPIキーを設定
 api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
-client = OpenAI(api_key=api_key)
+client = openai(api_key=api_key)
 
 # サイドバーにプロンプト入力フィールドを追加
 prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
