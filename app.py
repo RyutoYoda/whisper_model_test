@@ -12,7 +12,7 @@ st.title("VoiceCat🐈")
 api_key = st.sidebar.text_input("OpenAI API Key", type="password", value=os.getenv("OPENAI_API_KEY") or "")
 
 if not api_key:
-    st.sidebar.error("APIキーが必要です。")
+    st.error("サイドバーからAPIキーを入力してください。")
     st.stop()
 
 client = OpenAI(api_key=api_key)
@@ -54,9 +54,9 @@ if st.button("テキストを要約する"):
             summary_result = response.choices[0].message.content
 
             # 要約結果を表示
-            st.write("要約前のテキスト:")
-            st.write(st.session_state.transcript)  # 文字起こし結果を再表示
-            st.write("要約後のテキスト:")
+            #st.write("要約前のテキスト:")
+            #st.write(st.session_state.transcript)  # 文字起こし結果を再表示
+            st.write("解析結果:")
             st.write(summary_result)
 
             # 応答をバイトに変換し、それを base64 でエンコードする
