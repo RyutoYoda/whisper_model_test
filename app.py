@@ -27,10 +27,12 @@ if audio_file is not None:
                 model="whisper-1", file=audio_file, response_format="text"
             )
         st.success("音声文字起こしが完了しました！")
-        st.write(transcript)  # 文字起こしの結果を表示
+
+if transcript is not None:
+    st.write(transcript)  # 文字起こしの結果を表示
 
 if st.button("テキストを要約する"):
-    if transcript is not None:  # transcriptがあれば要約実行
+    if transcript is not None:
         prompt = sidebar_prompt + transcript
 
         if prompt.strip() != "":
