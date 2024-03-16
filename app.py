@@ -33,9 +33,9 @@ if audio_file is not None:
             f'<a href="data:file/txt;base64,{transcript_encoded}" download="transcript.txt">Download Result</a>',
             unsafe_allow_html=True,
         )
+        sidebar_prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
 
 if st.button("テキストを要約する"):
-    sidebar_prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
     prompt = sidebar_prompt
     
     # transcript 変数が定義されている場合にのみ結合する
@@ -43,7 +43,10 @@ if st.button("テキストを要約する"):
         prompt += f"\n\n{transcript}" 
 
     with st.spinner("テキスト要約を実行中です..."):
-        response = client.ChatCompletion.create(
+        from openai import OpenAI
+        client = OpenAI(api_key=api_key)
+
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": prompt},
