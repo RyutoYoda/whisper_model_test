@@ -33,8 +33,9 @@ if transcript is not None:
 
 if st.button("テキストを要約する"):
     if transcript is not None:
+        prompt = sidebar_prompt + transcript  # promptにtranscriptの内容を追加
+
         with st.spinner("テキスト要約を実行中です..."):
-            prompt = sidebar_prompt + transcript
             response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[
@@ -57,7 +58,6 @@ if st.button("テキストを要約する"):
             )
     else:
         st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
-
 
 
     
