@@ -38,8 +38,6 @@ if audio_file is not None:
 if st.button("テキストを要約する"):
     if 'transcript' in locals():
         prompt = sidebar_prompt + f"\n\n{transcript}"
-    else:
-        prompt = sidebar_prompt
 
     if prompt.strip() != "":
         with st.spinner("テキスト要約を実行中です..."): 
