@@ -43,8 +43,6 @@ if st.button("テキストを要約する"):
 
     if prompt.strip() != "":
         with st.spinner("テキスト要約を実行中です..."): 
-        # 生成されたテキストを返す
-        return response.choices[0].message.content
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
@@ -52,9 +50,7 @@ if st.button("テキストを要約する"):
                     {"role": "user", "content": prompt}
                 ]
             )
-
-            # 生成された要約を取得
-            summary_result = response.choices[0].message['要約結果']
+            summary_result = response.choices[0].message.content
 
             # 要約結果を表示
             st.write(summary_result)
