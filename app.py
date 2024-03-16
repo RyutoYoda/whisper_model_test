@@ -11,7 +11,7 @@ st.title("VoiceCat🐈")
 
 api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
 client = OpenAI(api_key=api_key)
-sidebar_prompt = st.sidebar.text_input("要約のプロンプト", "このテキストを要約してください")
+sidebar_prompt = st.sidebar.text_input("プロンプトの入力（例：このテキストを要約してください）")
 
 audio_file = st.file_uploader(
     "音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"]
@@ -43,9 +43,6 @@ if st.button("テキストを要約する"):
         prompt += f"\n\n{transcript}" 
 
     with st.spinner("テキスト要約を実行中です..."):
-        from openai import OpenAI
-        client = OpenAI(api_key=api_key)
-
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
