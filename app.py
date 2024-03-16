@@ -36,27 +36,34 @@ if audio_file is not None:
         )
 
 if st.button("テキストを要約する"):
-    # 変数名を修正して、サイドバーのプロンプトとトランスクリプトを結合
     prompt = sidebar_prompt
+    
+    # transcript 変数が定義されている場合にのみ結合する
     if 'transcript' in locals():
         prompt += f"\n\n{transcript}" 
+
     with st.spinner("テキスト要約を実行中です..."):
-        
         response = client.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "user", "content": prompt},  # 変更: ユーザーメッセージを追加
-                {"role": "assistant"}  # 変更: アシスタントの役割を定義
+                {"role": "user", "content": prompt},
+                {"role": "assistant"}
             ]
         )
-        # 生成されたテキストを表示
-        st.write(response.choices[0].message['要約結果'])
-        # 応答をバイトに変換し、それをbase64でエンコードする
-        response_encoded = base64.b64encode(str(response).encode()).decode()
 
-        # ダウンロードリンクを作成する
+        # 生成された要約を取得
+        summary_result = response.choices[0].message['要約結果']
+        
+        # 要約結果を表示
+        st.write(summary_result)
+
+        # 応答をバイトに変換し、それを base64 でエンコードする
+        response_encoded = base64.b64encode(summary_result.encode()).decode()
+
+        # ダウンロードリンクを作成する際に、ファイル名を明示的に指定
         st.markdown(
-            f'<a href="data:file/txt;base64,{response_encoded}" download="summary_response.txt">要約結果をダウンロード</a>',
+            f'<a href="data:file/txt;base64,{response_encoded}" download="summary_result.txt">要約結果をダウンロード</a>',
             unsafe_allow_html=True,
         )
+
 
