@@ -5,16 +5,13 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from io import BytesIO
 
-# 環境変数を読み込む
 load_dotenv()
 
 st.title("VoiceCat🐈")
 
-# サイドバーでAPIキーを設定
 api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
 client = OpenAI(api_key=api_key)
 
-# サイドバーにプロンプト入力フィールドを追加
 sidebar_prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
 audio_file = st.file_uploader(
     "音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"]
@@ -31,7 +28,6 @@ if audio_file is not None:
         st.success("音声文字起こしが完了しました！")
         st.write(transcript)
 
-        # 文字起こしをバイトに変換し、それをbase64でエンコードする
         transcript_encoded = base64.b64encode(transcript.encode()).decode()
         # ダウンロードリンクを作成する
         st.markdown(
@@ -53,9 +49,8 @@ if st.button("テキストを要約する"):
                 {"role": "assistant"}  # 変更: アシスタントの役割を定義
             ]
         )
-        # 応答オブジェクトをそのまま表示
-        st.text_area("要約結果", str(response))
-
+        # 生成されたテキストを表示
+        st.write(response.choices[0].message['要約結果'])
         # 応答をバイトに変換し、それをbase64でエンコードする
         response_encoded = base64.b64encode(str(response).encode()).decode()
 
