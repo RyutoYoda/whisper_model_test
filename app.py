@@ -43,6 +43,7 @@ if st.button("テキストを要約する"):
         prompt += f"\n\n{transcript}" 
 
     with st.spinner("テキスト要約を実行中です..."):
+        client = OpenAI(api_key=api_key)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
