@@ -42,12 +42,14 @@ if st.button("テキストを要約する"):
         prompt = sidebar_prompt
 
     if prompt.strip() != "":
-        with st.spinner("テキスト要約を実行中です..."):
+        with st.spinner("テキスト要約を実行中です..."): 
+        # 生成されたテキストを返す
+        return response.choices[0].message.content
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "user", "content": prompt},
-                    {"role": "assistant"}
+                    {"role": "system", "content": "ユーザーのプロンプトに基づき回答を生成してください"},
+                    {"role": "user", "content": prompt}
                 ]
             )
 
