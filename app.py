@@ -35,30 +35,27 @@ if st.button("テキストを要約する"):
     if transcript is not None:
         prompt = sidebar_prompt + transcript
 
-        if prompt.strip() != "":
-            with st.spinner("テキスト要約を実行中です..."): 
-                response = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "system", "content": "ユーザーのプロンプトに基づき回答を生成してください"},
-                        {"role": "user", "content": prompt}
-                    ]
-                )
-                summary_result = response.choices[0].message.content
+        with st.spinner("テキスト要約を実行中です..."): 
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "ユーザーのプロンプトに基づき回答を生成してください"},
+                    {"role": "user", "content": prompt}
+                ]
+            )
+            summary_result = response.choices[0].message.content
 
-                # 要約結果を表示
-                st.write(summary_result)
+            # 要約結果を表示
+            st.write(summary_result)
 
-                # 応答をバイトに変換し、それを base64 でエンコードする
-                response_encoded = base64.b64encode(summary_result.encode()).decode()
+            # 応答をバイトに変換し、それを base64 でエンコードする
+            response_encoded = base64.b64encode(summary_result.encode()).decode()
 
-                # ダウンロードリンクを作成する際に、ファイル名を明示的に指定
-                st.markdown(
-                    f'<a href="data:file/txt;base64,{response_encoded}" download="summary_result.txt">要約結果をダウンロード</a>',
-                    unsafe_allow_html=True,
-                )
-        else:
-            st.warning("要約のプロンプトが空です。テキスト要約のプロンプトを入力してください。")
+            # ダウンロードリンクを作成する際に、ファイル名を明示的に指定
+            st.markdown(
+                f'<a href="data:file/txt;base64,{response_encoded}" download="summary_result.txt">要約結果をダウンロード</a>',
+                unsafe_allow_html=True,
+            )
     else:
         st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
 
