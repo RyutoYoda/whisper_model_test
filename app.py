@@ -12,7 +12,6 @@ st.title("VoiceCat🐈")
 api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
 client = OpenAI(api_key=api_key)
 
-sidebar_prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
 audio_file = st.file_uploader(
     "音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"]
 )
@@ -36,6 +35,7 @@ if audio_file is not None:
         )
 
 if st.button("テキストを要約する"):
+    sidebar_prompt = st.sidebar.text_area("要約のプロンプト", "このテキストを要約してください。")
     prompt = sidebar_prompt
     
     # transcript 変数が定義されている場合にのみ結合する
