@@ -9,7 +9,12 @@ load_dotenv()
 st.title("VoiceCat🐈")
 
 # APIキーの取得
-api_key = st.sidebar.text_input("OpenAI API Key", os.getenv("OPENAI_API_KEY"))
+api_key = st.sidebar.text_input("OpenAI API Key", type="password", value=os.getenv("OPENAI_API_KEY") or "")
+
+if not api_key:
+    st.sidebar.error("APIキーが必要です。")
+    st.stop()
+
 client = OpenAI(api_key=api_key)
 
 # プロンプトの入力
