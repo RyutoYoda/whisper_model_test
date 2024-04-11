@@ -5,6 +5,10 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 load_dotenv()
+st.set_page_config(
+    page_title="VoiceCat",
+    page_icon="🐈"
+)
 
 st.title("VoiceCat🐈")
 
