@@ -219,9 +219,6 @@ if st.button("処理を開始する"):
             )
             summary_result = response.choices[0].message.content
 
-            # 要約結果を表示
-            #st.write("要約前のテキスト:")
-            #st.write(st.session_state.transcript)  # 文字起こし結果を再表示
             st.write("処理結果:")
             st.write(summary_result)
 
@@ -235,5 +232,4 @@ if st.button("処理を開始する"):
             )
     else:
         st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
-
 
