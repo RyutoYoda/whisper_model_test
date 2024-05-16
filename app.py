@@ -10,7 +10,7 @@ st.set_page_config(
     page_icon="🐈"
 )
 
-st.markdown('<h1 style="color: orange;">VoiceCat🐈</h1>', unsafe_allow_html=True)
+st.markdown('<h1 style="color: #FFA500;">VoiceCat🐈</h1>', unsafe_allow_html=True)
 
 # スタイル設定
 st.markdown("""
@@ -97,7 +97,7 @@ li {
         color: #ffffff;
     }
     .big-font, .header-font {
-        color: #61dafb;
+        color: #FFA500;
     }
     .subheader-font {
         color: #a9a9a9;
@@ -107,11 +107,11 @@ li {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     }
     .stButton>button {
-        background-color: #61dafb !important;
+        background-color: #FFA500 !important;
         color: #282c34 !important;
     }
     .stTextInput>div>div>input {
-        border: 1px solid #61dafb !important;
+        border: 1px solid #FFA500 !important;
         color: #ffffff !important;
         background-color: #3c3f41 !important;
     }
@@ -122,7 +122,7 @@ li {
         color: #333333;
     }
     .big-font, .header-font {
-        color: #007bff;
+        color: #FFA500;
     }
     .subheader-font {
         color: #666666;
@@ -132,11 +132,11 @@ li {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     }
     .stButton>button {
-        background-color: #007bff !important;
+        background-color: #FFA500 !important;
         color: #ffffff !important;
     }
     .stTextInput>div>div>input {
-        border: 1px solid #cccccc !important;
+        border: 1px solid #FFA500 !important;
     }
 }
 </style>
