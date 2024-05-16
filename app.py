@@ -127,9 +127,9 @@ li {
         color: #282c34 !important;
     }
     .stTextInput>div>div>input {
-        border: 1px solid #61dafb !important;
+        border: 1px solid #61dafb !重要;
         color: #ffffff !important;
-        background-color: #3c3f41 !important;
+        background-color: #3c3f41 !重要;
     }
 }
 @media (prefers-color-scheme: light) {
@@ -208,12 +208,12 @@ if st.button("処理を開始する"):
 
         with st.spinner("処理を実行中です..."):
             response = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "system", "content": "ユーザーのプロンプトに基づき回答を生成してください"},
-                        {"role": "user", "content": prompt}
-                    ]
-                )
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "ユーザーのプロンプトに基づき回答を生成してください"},
+                    {"role": "user", "content": prompt}
+                ]
+            )
             summary_result = response.choices[0].message.content
 
             # 要約結果を表示
@@ -231,4 +231,5 @@ if st.button("処理を開始する"):
                 unsafe_allow_html=True,
             )
     else:
-        st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
+        st.warning("音声文字起こしの結果がありません。音声文字起こしを実行
+
