@@ -17,15 +17,8 @@ st.set_page_config(
 # Custom CSS for styling
 st.markdown("""
     <style>
-        body {
-            background-color: #000000;
-            color: #FFFFFF;
-        }
         .main {
-            background-color: #333333;
             color: #FFFFFF;
-            padding: 20px;
-            border-radius: 10px;
         }
         .stButton > button {
             background-color: #007BFF;
@@ -44,7 +37,6 @@ st.markdown("""
         .header {
             text-align: center;
             padding: 20px;
-            background-color: #000000;
         }
         .header img {
             width: 200px;
@@ -144,3 +136,4 @@ if st.button("処理を開始する"):
             )
     else:
         st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
+
