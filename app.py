@@ -56,6 +56,7 @@ body {
     padding: 20px;
     box-shadow: none;
     margin-bottom: 20px;
+    background-color: transparent !important;
 }
 .stButton>button {
     font-size: 16px !important;
@@ -77,6 +78,7 @@ li {
     padding: 10px;
     border-radius: 5px;
     box-shadow: none;
+    background-color: transparent !important;
 }
 .header-container {
     display: flex;
@@ -104,9 +106,13 @@ li {
     width: 90%;
     max-width: 700px;
     text-align: left;
+    background-color: transparent !important;
 }
 .card img {
     border-radius: 10px;
+}
+.sidebar .css-1d391kg {
+    background-color: transparent !important;
 }
 @media (prefers-color-scheme: dark) {
     body {
@@ -120,17 +126,17 @@ li {
         color: #a9a9a9;
     }
     .container, .card, li {
-        background-color: #282c34;
+        background-color: transparent !important;
         box-shadow: none;
     }
     .stButton>button {
         background-color: #FFA500 !important;
-        color: #282c34 !important;
+        color: #282c34 !重要;
     }
     .stTextInput>div>div>input {
-        border: 1px solid #FFA500 !important;
-        color: #ffffff !important;
-        background-color: #3c3f41 !important;
+        border: 1px solid #FFA500 !重要;
+        color: #ffffff !重要;
+        background-color: #3c3f41 !重要;
     }
 }
 @media (prefers-color-scheme: light) {
@@ -145,18 +151,18 @@ li {
         color: #666666;
     }
     .container, .card, li {
-        background-color: #ffffff;
+        background-color: transparent !重要;
         box-shadow: none;
         color: #333333;
     }
     .stButton>button {
-        background-color: #FFA500 !important;
-        color: #ffffff !important;
+        background-color: #FFA500 !重要;
+        color: #ffffff !重要;
     }
     .stTextInput>div>div>input {
-        border: 1px solid #FFA500 !important;
-        color: #333333 !important;
-        background-color: #ffffff !important;
+        border: 1px solid #FFA500 !重要;
+        color: #333333 !重要;
+        background-color: #ffffff !重要;
     }
 }
 .stMarkdown {
