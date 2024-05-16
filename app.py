@@ -4,14 +4,55 @@ import streamlit as st
 from dotenv import load_dotenv
 from openai import OpenAI
 
+# Load environment variables
 load_dotenv()
+
+# Set page configuration
 st.set_page_config(
     page_title="VoiceCat",
-    page_icon="🐈"
+    page_icon="🐈",
+    layout="centered"
 )
 
-st.title("VoiceCat🐈")
+# Custom CSS for styling
+st.markdown("""
+    <style>
+        .main {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .stButton > button {
+            background-color: #ffcc00;
+            color: white;
+            border-radius: 10px;
+            padding: 10px 20px;
+        }
+        .stTextInput > div > input {
+            border-radius: 10px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-image: url('https://example.com/background-image.jpg');
+            background-size: cover;
+        }
+        .header img {
+            width: 200px;
+            margin: 0 auto;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
+# Page title
+st.markdown("""
+    <div class="header">
+        <img src="https://example.com/logo.png" alt="VoiceCat Logo">
+        <h1>VoiceCat🐈</h1>
+    </div>
+""", unsafe_allow_html=True)
+
+# About section
 with st.expander("VoiceCatについて"):
     st.write("""
         VoiceCat🐈は、音声ファイルをテキストに変換し、そのテキストを指示に応じて処理、解析するアプリです。
@@ -25,7 +66,7 @@ with st.expander("VoiceCatについて"):
         6. 処理結果が表示されます。必要に応じて処理結果をダウンロードすることもできます。
     """)
 
-# APIキーの取得
+# Get API key from sidebar
 api_key = st.sidebar.text_input("OpenAI API Key", type="password", value=os.getenv("OPENAI_API_KEY") or "")
 
 if not api_key:
@@ -34,10 +75,10 @@ if not api_key:
 
 client = OpenAI(api_key=api_key)
 
-# プロンプトの入力
+# Get prompt from sidebar
 sidebar_prompt = st.sidebar.text_input("処理内容の入力（例：このテキストを要約してください）")
 
-# 音声ファイルのアップロード
+# Upload audio file
 audio_file = st.file_uploader("音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"])
 
 if audio_file is not None:
@@ -49,37 +90,35 @@ if audio_file is not None:
                 model="whisper-1", file=audio_file, response_format="text"
             )
         st.success("音声文字起こしが完了しました！")
-        st.session_state.transcript = transcript  # 文字起こし結果をセッション状態に保存
+        st.session_state.transcript = transcript  # Save transcription result to session state
 
-# セッション状態に文字起こし結果がある場合に表示
+# Display transcription result if available
 if 'transcript' in st.session_state and st.session_state.transcript is not None:
     st.write(st.session_state.transcript)
 
-# テキスト要約ボタン
+# Button to process transcription
 if st.button("処理を開始する"):
     if 'transcript' in st.session_state and st.session_state.transcript is not None:
-        prompt = sidebar_prompt + st.session_state.transcript  # promptにセッション状態の文字起こし結果を使用
+        prompt = sidebar_prompt + st.session_state.transcript  # Use transcription result in prompt
 
         with st.spinner("処理を実行中です..."):
             response = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "system", "content": "ユーザーのプロンプトに基づき回答を生成してください"},
-                        {"role": "user", "content": prompt}
-                    ]
-                )
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "ユーザーのプロンプトに基づき回答を生成してください"},
+                    {"role": "user", "content": prompt}
+                ]
+            )
             summary_result = response.choices[0].message.content
 
-            # 要約結果を表示
-            #st.write("要約前のテキスト:")
-            #st.write(st.session_state.transcript)  # 文字起こし結果を再表示
+            # Display summary result
             st.write("処理結果:")
             st.write(summary_result)
 
-            # 応答をバイトに変換し、それを base64 でエンコードする
+            # Convert response to bytes and encode it in base64
             response_encoded = base64.b64encode(summary_result.encode()).decode()
 
-            # ダウンロードリンクを作成
+            # Create download link
             st.markdown(
                 f'<a href="data:file/txt;base64,{response_encoded}" download="summary_result.txt">処理結果をダウンロード</a>',
                 unsafe_allow_html=True,
