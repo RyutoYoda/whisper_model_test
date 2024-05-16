@@ -10,6 +10,22 @@ st.set_page_config(
     page_icon="🐈"
 )
 
+# 画像をタイトルの上に追加
+def load_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
+image_path = "/mnt/data/A_cute_cat_wearing_headphones,_depicted_in_a_wide_.png"  # 画像ファイルのパスを指定
+image_base64 = load_image(image_path)
+st.markdown(
+    f"""
+    <div style="text-align: center;">
+        <img src="data:image/png;base64,{image_base64}" alt="可愛い猫の画像" style="width: 100%; max-width: 600px;"/>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.markdown('<h1 style="color: #FFA500;">VoiceCat🐈</h1>', unsafe_allow_html=True)
 
 # スタイル設定
