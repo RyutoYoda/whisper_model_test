@@ -54,7 +54,7 @@ body {
 .container {
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     margin-bottom: 20px;
 }
 .stButton>button {
@@ -76,7 +76,7 @@ li {
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
 }
 .header-container {
     display: flex;
@@ -98,7 +98,7 @@ li {
 }
 .card {
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     margin: 20px;
     padding: 20px;
     width: 90%;
@@ -121,7 +121,7 @@ li {
     }
     .container, .card, li {
         background-color: #282c34;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        box-shadow: none;
     }
     .stButton>button {
         background-color: #FFA500 !important;
@@ -146,7 +146,7 @@ li {
     }
     .container, .card, li {
         background-color: #ffffff;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: none;
         color: #333333;
     }
     .stButton>button {
@@ -238,4 +238,5 @@ if st.button("処理を開始する"):
             )
     else:
         st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
+
 
