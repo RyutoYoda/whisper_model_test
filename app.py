@@ -17,34 +17,53 @@ st.set_page_config(
 # Custom CSS for styling
 st.markdown("""
     <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+        }
         .main {
-            background-color: #f5f5f5;
+            background-color: #333333;
+            color: #FFFFFF;
             padding: 20px;
             border-radius: 10px;
         }
         .stButton > button {
-            background-color: #ffcc00;
+            background-color: #007BFF;
             color: white;
             border-radius: 10px;
             padding: 10px 20px;
         }
         .stTextInput > div > input {
             border-radius: 10px;
+            background-color: #555555;
+            color: #FFFFFF;
+        }
+        .stFileUploader > div > div {
+            background-color: #555555;
         }
         .header {
             text-align: center;
             padding: 20px;
-            background-image: url('https://example.com/background-image.jpg');
-            background-size: cover;
+            background-color: #000000;
         }
         .header img {
             width: 200px;
             margin: 0 auto;
         }
+        .header h1 {
+            color: #007BFF;
+        }
+        .stExpander {
+            background-color: #222222;
+            border-radius: 10px;
+        }
+        .stExpander > div > div {
+            color: #FFFFFF;
+        }
     </style>
 """, unsafe_allow_html=True)
 
-# Page title
+# Page title with logo
 st.markdown("""
     <div class="header">
         <img src="https://example.com/logo.png" alt="VoiceCat Logo">
