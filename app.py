@@ -10,7 +10,24 @@ st.set_page_config(
     page_icon="🐈"
 )
 
-st.title("VoiceCat🐈")
+# タイトル上に画像を追加
+def load_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
+image_path = "title_image.png"  # 画像ファイルのパスを指定
+image_base64 = load_image(image_path)
+st.markdown(
+    f"""
+    <div style="text-align: center;">
+        <img src="data:image/png;base64,{image_base64}" alt="Title Image" style="width: 100%; max-width: 600px;"/>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown('<h1 style="color: orange;">VoiceCat🐈</h1>', unsafe_allow_html=True)
+
 # スタイル設定
 st.markdown("""
 <style>
@@ -215,5 +232,3 @@ if st.button("処理を開始する"):
             )
     else:
         st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
-
-
