@@ -10,7 +10,10 @@ st.set_page_config(
     page_icon="🐈"
 )
 
-# 画像をタイトルの上に追加
+# タイトルの表示
+st.markdown('<h1 style="color: #FFA500;">VoiceCat🐈</h1>', unsafe_allow_html=True)
+
+# 画像をタイトルの下に追加する関数
 def load_image(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
@@ -25,8 +28,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-st.markdown('<h1 style="color: #FFA500;">VoiceCat🐈</h1>', unsafe_allow_html=True)
 
 # スタイル設定
 st.markdown("""
@@ -244,5 +245,4 @@ if st.button("処理を開始する"):
             )
     else:
         st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
-
 
