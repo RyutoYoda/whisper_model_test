@@ -4,153 +4,14 @@ import streamlit as st
 from dotenv import load_dotenv
 from openai import OpenAI
 
-# Load environment variables
 load_dotenv()
-
-# Set page configuration
 st.set_page_config(
     page_title="VoiceCat",
-    page_icon="🐈",
-    layout="centered"
+    page_icon="🐈"
 )
 
-<style>
-body {
-    font-family: 'Helvetica Neue', sans-serif;
-}
-.big-font {
-    font-size:50px !important;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 30px;
-}
-.header-font {
-    font-size:30px !important;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-.subheader-font {
-    font-size:20px !important;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-.container {
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-.stButton>button {
-    font-size: 16px !important;
-    font-weight: bold !important;
-    border-radius: 5px !important;
-    width: 100%;
-    padding: 10px;
-}
-.stTextInput>div>div>input {
-    border-radius: 5px !important;
-    border: 1px solid !important;
-}
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-li {
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-}
-.header-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-}
-.sidebar-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
-}
-.main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.card {
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-    padding: 20px;
-    width: 90%;
-    max-width: 700px;
-    text-align: left;
-}
-.card img {
-    border-radius: 10px;
-}
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #1e1e1e;
-        color: #ffffff;
-    }
-    .big-font, .header-font {
-        color: #61dafb;
-    }
-    .subheader-font {
-        color: #a9a9a9;
-    }
-    .container, .card, li {
-        background-color: #282c34;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    }
-    .stButton>button {
-        background-color: #61dafb !important;
-        color: #282c34 !important;
-    }
-    .stTextInput>div>div>input {
-        border: 1px solid #61dafb !important;
-        color: #ffffff !important;
-        background-color: #3c3f41 !important;
-    }
-}
-@media (prefers-color-scheme: light) {
-    body {
-        background-color: #f5f5f5;
-        color: #333333;
-    }
-    .big-font, .header-font {
-        color: #007bff;
-    }
-    .subheader-font {
-        color: #666666;
-    }
-    .container, .card, li {
-        background-color: #ffffff;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
-    .stButton>button {
-        background-color: #007bff !important;
-        color: #ffffff !important;
-    }
-    .stTextInput>div>div>input {
-        border: 1px solid #cccccc !important;
-    }
-}
-</style>
-""", unsafe_allow_html=True)
+st.title("VoiceCat🐈")
 
-# Page title with logo
-st.markdown("""
-<div class="header-container">
-    <img src="https://example.com/logo.png" class="sidebar-img" alt="VoiceCat Logo">
-    <div class="big-font">VoiceCat🐈</div>
-</div>
-""", unsafe_allow_html=True)
-
-# About section
 with st.expander("VoiceCatについて"):
     st.write("""
         VoiceCat🐈は、音声ファイルをテキストに変換し、そのテキストを指示に応じて処理、解析するアプリです。
@@ -164,7 +25,7 @@ with st.expander("VoiceCatについて"):
         6. 処理結果が表示されます。必要に応じて処理結果をダウンロードすることもできます。
     """)
 
-# Get API key from sidebar
+# APIキーの取得
 api_key = st.sidebar.text_input("OpenAI API Key", type="password", value=os.getenv("OPENAI_API_KEY") or "")
 
 if not api_key:
@@ -173,10 +34,10 @@ if not api_key:
 
 client = OpenAI(api_key=api_key)
 
-# Get prompt from sidebar
+# プロンプトの入力
 sidebar_prompt = st.sidebar.text_input("処理内容の入力（例：このテキストを要約してください）")
 
-# Upload audio file
+# 音声ファイルのアップロード
 audio_file = st.file_uploader("音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"])
 
 if audio_file is not None:
@@ -188,39 +49,42 @@ if audio_file is not None:
                 model="whisper-1", file=audio_file, response_format="text"
             )
         st.success("音声文字起こしが完了しました！")
-        st.session_state.transcript = transcript  # Save transcription result to session state
+        st.session_state.transcript = transcript  # 文字起こし結果をセッション状態に保存
 
-# Display transcription result if available
+# セッション状態に文字起こし結果がある場合に表示
 if 'transcript' in st.session_state and st.session_state.transcript is not None:
     st.write(st.session_state.transcript)
 
-# Button to process transcription
+# テキスト要約ボタン
 if st.button("処理を開始する"):
     if 'transcript' in st.session_state and st.session_state.transcript is not None:
-        prompt = sidebar_prompt + st.session_state.transcript  # Use transcription result in prompt
+        prompt = sidebar_prompt + st.session_state.transcript  # promptにセッション状態の文字起こし結果を使用
 
         with st.spinner("処理を実行中です..."):
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "ユーザーのプロンプトに基づき回答を生成してください"},
-                    {"role": "user", "content": prompt}
-                ]
-            )
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "system", "content": "ユーザーのプロンプトに基づき回答を生成してください"},
+                        {"role": "user", "content": prompt}
+                    ]
+                )
             summary_result = response.choices[0].message.content
 
-            # Display summary result
+            # 要約結果を表示
+            #st.write("要約前のテキスト:")
+            #st.write(st.session_state.transcript)  # 文字起こし結果を再表示
             st.write("処理結果:")
             st.write(summary_result)
 
-            # Convert response to bytes and encode it in base64
+            # 応答をバイトに変換し、それを base64 でエンコードする
             response_encoded = base64.b64encode(summary_result.encode()).decode()
 
-            # Create download link
+            # ダウンロードリンクを作成
             st.markdown(
                 f'<a href="data:file/txt;base64,{response_encoded}" download="summary_result.txt">処理結果をダウンロード</a>',
                 unsafe_allow_html=True,
             )
     else:
         st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
+
 
