@@ -28,6 +28,7 @@ body {
     font-size:30px !important;
     font-weight: bold;
     margin-bottom: 20px;
+    color: #FFA500;
 }
 .subheader-font {
     font-size:20px !important;
@@ -46,10 +47,14 @@ body {
     border-radius: 5px !important;
     width: 100%;
     padding: 10px;
+    background-color: #FFA500 !important;
+    color: #ffffff !important;
 }
 .stTextInput>div>div>input {
     border-radius: 5px !important;
-    border: 1px solid !important;
+    border: 1px solid #FFA500 !important;
+    color: #333333 !important;
+    background-color: #ffffff !important;
 }
 ul {
     list-style-type: none;
@@ -60,6 +65,8 @@ li {
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    color: #333333;
 }
 .header-container {
     display: flex;
@@ -87,6 +94,8 @@ li {
     width: 90%;
     max-width: 700px;
     text-align: left;
+    background-color: #ffffff;
+    color: #333333;
 }
 .card img {
     border-radius: 10px;
@@ -130,6 +139,7 @@ li {
     .container, .card, li {
         background-color: #ffffff;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        color: #333333;
     }
     .stButton>button {
         background-color: #FFA500 !important;
@@ -137,6 +147,8 @@ li {
     }
     .stTextInput>div>div>input {
         border: 1px solid #FFA500 !important;
+        color: #333333 !important;
+        background-color: #ffffff !important;
     }
 }
 </style>
@@ -216,4 +228,3 @@ if st.button("処理を開始する"):
             )
     else:
         st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
-
