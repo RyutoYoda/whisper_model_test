@@ -231,5 +231,5 @@ if st.button("処理を開始する"):
                 unsafe_allow_html=True,
             )
     else:
-        st.warning("音声文字起こしの結果がありません。音声文字起こしを実行
+        st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
 
