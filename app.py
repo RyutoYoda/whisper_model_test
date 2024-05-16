@@ -14,8 +14,6 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for styling
-st.markdown("""
 <style>
 body {
     font-family: 'Helvetica Neue', sans-serif;
@@ -29,7 +27,6 @@ body {
 .header-font {
     font-size:30px !important;
     font-weight: bold;
-    color: #007BFF;
     margin-bottom: 20px;
 }
 .subheader-font {
