@@ -20,7 +20,7 @@ image_base64 = load_image(image_path)
 st.markdown(
     f"""
     <div style="text-align: center;">
-        <img src="data:image/png;base64,{image_base64}" alt="可愛い猫の画像" style="width: 100%; max-width: 600px;"/>
+        <img src="data:image/png;base64,{image_base64}" alt="可愛い猫の画像" style="width: 100%;"/>
     </div>
     """,
     unsafe_allow_html=True
