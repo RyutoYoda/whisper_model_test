@@ -143,21 +143,36 @@ li {
         background-color: #ffffff !important;
     }
 }
+.stMarkdown {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+@media (prefers-color-scheme: dark) {
+    .stMarkdown {
+        background-color: #282c34 !important;
+        color: #ffffff !important;
+    }
+}
 </style>
 """, unsafe_allow_html=True)
 
 with st.expander("VoiceCatについて"):
-    st.write("""
-        VoiceCat🐈は、音声ファイルをテキストに変換し、そのテキストを指示に応じて処理、解析するアプリです。
-        
-        **使い方:**
-        1. サイドバーからOpenAI APIキーを入力してください。(https://platform.openai.com/api-keys)
-        2. 「処理内容の入力」に処理としてに行いたい指示を入力します（例: 「このテキストを要約してください」）。
-        3. 「音声ファイルをアップロードしてください」セクションから、文字起こしを行いたい音声ファイルをアップロードしてください。
-        4. 「音声文字起こしを実行する」ボタンを押して、アップロードした音声ファイルの文字起こしを行います。
-        5. 文字起こし結果が表示された後、「処理を開始する」ボタンを押して、文字起こししたテキストの解析を行います。
-        6. 処理結果が表示されます。必要に応じて処理結果をダウンロードすることもできます。
-    """)
+    st.markdown("""
+        <div class="stMarkdown">
+            VoiceCat🐈は、音声ファイルをテキストに変換し、そのテキストを指示に応じて処理、解析するアプリです。
+            
+            **使い方:**
+            1. サイドバーからOpenAI APIキーを入力してください。(https://platform.openai.com/api-keys)
+            2. 「処理内容の入力」に処理としてに行いたい指示を入力します（例: 「このテキストを要約してください」）。
+            3. 「音声ファイルをアップロードしてください」セクションから、文字起こしを行いたい音声ファイルをアップロードしてください。
+            4. 「音声文字起こしを実行する」ボタンを押して、アップロードした音声ファイルの文字起こしを行います。
+            5. 文字起こし結果が表示された後、「処理を開始する」ボタンを押して、文字起こししたテキストの解析を行います。
+            6. 処理結果が表示されます。必要に応じて処理結果をダウンロードすることもできます。
+        </div>
+    """, unsafe_allow_html=True)
 
 # APIキーの取得
 api_key = st.sidebar.text_input("OpenAI API Key", type="password", value=os.getenv("OPENAI_API_KEY") or "")
@@ -220,4 +235,5 @@ if st.button("処理を開始する"):
             )
     else:
         st.warning("音声文字起こしの結果がありません。音声文字起こしを実行してください。")
+
 
