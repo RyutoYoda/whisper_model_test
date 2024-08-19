@@ -199,6 +199,7 @@ client = OpenAI(api_key=api_key)
 sidebar_prompt = st.sidebar.text_area(
     "処理内容の入力（例：このテキストを要約してください）",
     value="""以下のテンプレートを参考に音声を処理してください。　
+    以下はあくまで参考です。柔軟な出力をお願いします。
 [音声情報]
 ~様：~
 オペレータ：~
