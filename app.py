@@ -195,8 +195,10 @@ if not api_key:
 
 client = OpenAI(api_key=api_key)
 
-# プロンプトの入力
-sidebar_prompt = st.sidebar.text_input("処理内容の入力（例：このテキストを要約してください）")
+sidebar_prompt = st.sidebar.text_input(
+    "処理内容の入力（例：このテキストを要約してください）",
+    value="発言者A：\n発言者B："
+)
 
 # 音声ファイルのアップロード
 audio_file = st.file_uploader("音声ファイルをアップロードしてください", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav"])
